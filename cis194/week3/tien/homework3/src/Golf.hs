@@ -1,6 +1,7 @@
 module Golf where
 
 import           Data.Array
+import           Data.Bool
 import           Data.List
 
 -- Exercise 1 --
@@ -33,25 +34,17 @@ formGroups =
   map (\(x, y) -> [x, y]) . assocs . accumArray (+) 0 (0, 9) . formPairs
 
 mapToHistogram :: [Integer] -> [String]
-mapToHistogram =
-  map
-    (\k ->
-       if k > 0
-         then "*"
-         else " ")
+mapToHistogram = map mapToString
+  where
+    mapToString = bool <$> const " " <*> const "*" <*> (> 0)
 
 formHistogram :: [Integer] -> [[String]]
 formHistogram arr
   | any (> 1) arr =
-    formHistogram
-      (map
-         (\x ->
-            if x > 0
-              then x - 1
-              else x)
-         arr) ++
-    [mapToHistogram arr]
+    (formHistogram . map remainingPoints $ arr) ++ [mapToHistogram arr]
   | otherwise = [mapToHistogram arr]
+  where
+    remainingPoints = bool <$> id <*> subtract 1 <*> (> 0)
 
 histogram :: [Integer] -> String
 histogram =
