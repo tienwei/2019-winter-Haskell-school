@@ -1,14 +1,9 @@
-module StringBufEditor where
+module Main where
 
-import Buffer (fromString)
-import StringBuffer (BufferString)
+import StringBuffer
 import Editor
 
-fromBufferString :: String -> BufferString
-fromBufferString = fromString
-
-main :: IO ()
-main = runEditor editor $ fromBufferString . unlines $
+main = runEditor editor $ unlines
          [ "This buffer is for notes you don't want to save, and for"
          , "evaluation of steam valve coefficients."
          , "To load a different file, type the character L followed"

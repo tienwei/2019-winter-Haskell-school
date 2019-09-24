@@ -1,14 +1,17 @@
-module StringBufEditor where
+{-# OPTIONS_GHC -Wall #-}
 
-import Buffer (fromString)
-import StringBuffer (BufferString)
+module JoinListEditor where
+
+import JoinList
 import Editor
-
-fromBufferString :: String -> BufferString
-fromBufferString = fromString
+import Scrabble
+import Sized
+import Buffer
 
 main :: IO ()
-main = runEditor editor $ fromBufferString . unlines $
+main = runEditor editor defBuf
+  where defBuf :: JoinList (Score, Size) String
+        defBuf = fromString . unlines $
          [ "This buffer is for notes you don't want to save, and for"
          , "evaluation of steam valve coefficients."
          , "To load a different file, type the character L followed"

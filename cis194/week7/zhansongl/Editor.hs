@@ -10,6 +10,7 @@ import Buffer
 import Control.Exception
 import Control.Monad.State
 
+import Control.Applicative
 import Control.Arrow       (first, second)
 
 import Data.Char
