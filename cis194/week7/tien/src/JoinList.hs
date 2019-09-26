@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wall #-}
+
 module JoinList where
 
 import Sized
@@ -20,14 +21,15 @@ tag (Append m jl1 jl2) = (tag jl1) <> (tag jl2)
 
 -- exercise 2 --
 (!!?) :: [a] -> Int -> Maybe a
-[]     !!? _          = Nothing
-_      !!? i | i < 0  = Nothing
+[] !!? _ = Nothing
+_ !!? i
+  | i < 0 = Nothing
 (x:xs) !!? 0 = Just x
-(_:xs) !!? i = xs !!? (i-1)
+(_:xs) !!? i = xs !!? (i - 1)
 
 jlToList :: JoinList m a -> [a]
-jlToList Empty            = []
-jlToList (Single _ a)     = [a]
+jlToList Empty = []
+jlToList (Single _ a) = [a]
 jlToList (Append _ l1 l2) = jlToList l1 ++ jlToList l2
 
 indexJ' :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
@@ -37,7 +39,5 @@ indexJ' x (Append _ left right)
   | otherwise = indexJ' (x - (getSize . size . tag $ left)) right
 indexJ' _ _ = Nothing
 
-
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
-indexJ = indexJ' . (+1)
-
+indexJ = indexJ' . (+ 1)
