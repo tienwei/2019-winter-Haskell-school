@@ -13,7 +13,7 @@ data JoinList m a
 tag :: Monoid m => JoinList m a -> m
 tag Empty = mempty
 tag (Single m _) = m
-tag (Append m jl1 jl2) = (tag jl1) <> (tag jl2)
+tag (Append _ jl1 jl2) = (tag jl1) <> (tag jl2)
 
 -- exercise 1 --
 (+++) :: Monoid m => JoinList m a -> JoinList m a -> JoinList m a
@@ -47,11 +47,25 @@ indexJ = indexJ' . (+ 1)
 
 -- 2.2 --
 dropJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
-dropJ 1 (Append _ (Single _ _) right@(Single _ _)) = right
+dropJ 0 jl = jl
+dropJ 1 jl@(Single _ _) = jl
 dropJ x (Append _ left right)
-  | x == (getSize . size . tag $ left) = right
+  | x == leftSize = right
   | x < leftSize = (dropJ x left) +++ right
   | otherwise = dropJ (x - leftSize) right
   where
     leftSize = getSize . size . tag $left
 dropJ _ _ = Empty
+
+-- 2.3 --
+takeJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
+takeJ 1 jl@(Single _ _) = jl
+takeJ x jl@(Append y left right)
+  | x > jlSize = jl
+  | x == leftSize = left
+  | x < leftSize = takeJ x left
+  | otherwise = left +++ takeJ (x - leftSize) right
+  where
+    jlSize = getSize . size $ y
+    leftSize = getSize . size . tag $ left
+takeJ _ _ = Empty

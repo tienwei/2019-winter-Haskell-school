@@ -29,12 +29,19 @@ main =
         let jl2 = Append (Size 2) (Single (Size 1) 'e') (Single (Size 1) 'f')
         let jl3 = Append (Size 6) jl1 jl2
         describe "2.1" $ do
-          it "should return same result as using jlToList and !!?" $ do
+          it "should return same result as via jlToList and !!?" $ do
             indexJ 1 jl3 `shouldBe` (jlToList jl3 !!? 1)
             indexJ 3 jl3 `shouldBe` (jlToList jl3 !!? 3)
             indexJ 10 jl3 `shouldBe` (jlToList jl3 !!? 10)
         describe "2.2" $ do
-          it "should return the same list via normal drop" $ do
+          it "should return the same result via normal drop" $ do
+            jlToList (dropJ 0 jl3) `shouldBe` drop 0 (jlToList jl3)
             jlToList (dropJ 1 jl3) `shouldBe` drop 1 (jlToList jl3)
             jlToList (dropJ 2 jl3) `shouldBe` drop 2 (jlToList jl3)
             jlToList (dropJ 10 jl3) `shouldBe` drop 10 (jlToList jl3)
+        describe "2.3" $ do
+          it "should return the same result via normal take" $ do
+            jlToList (takeJ 0 jl3) `shouldBe` take 0 (jlToList jl3)
+            jlToList (takeJ 1 jl3) `shouldBe` take 1 (jlToList jl3)
+            jlToList (takeJ 3 jl3) `shouldBe` take 3 (jlToList jl3)
+            jlToList (takeJ 8 jl3) `shouldBe` take 8 (jlToList jl3)
