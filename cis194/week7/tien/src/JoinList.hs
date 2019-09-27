@@ -32,12 +32,26 @@ jlToList Empty = []
 jlToList (Single _ a) = [a]
 jlToList (Append _ l1 l2) = jlToList l1 ++ jlToList l2
 
+-- 2.1 --
 indexJ' :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
 indexJ' 1 (Single _ a) = Just a
 indexJ' x (Append _ left right)
-  | x <= (getSize . size . tag $ left) = indexJ' x left
-  | otherwise = indexJ' (x - (getSize . size . tag $ left)) right
+  | x <= leftSize = indexJ' x left
+  | otherwise = indexJ' (x - leftSize) right
+  where
+    leftSize = getSize . size . tag $left
 indexJ' _ _ = Nothing
 
 indexJ :: (Sized b, Monoid b) => Int -> JoinList b a -> Maybe a
 indexJ = indexJ' . (+ 1)
+
+-- 2.2 --
+dropJ :: (Sized b, Monoid b) => Int -> JoinList b a -> JoinList b a
+dropJ 1 (Append _ (Single _ _) right@(Single _ _)) = right
+dropJ x (Append _ left right)
+  | x == (getSize . size . tag $ left) = right
+  | x < leftSize = (dropJ x left) +++ right
+  | otherwise = dropJ (x - leftSize) right
+  where
+    leftSize = getSize . size . tag $left
+dropJ _ _ = Empty

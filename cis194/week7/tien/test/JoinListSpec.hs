@@ -18,18 +18,23 @@ main =
                   (Single (Product 3) 'h')
           jl1 +++ jl2 `shouldBe` (Append (Product 150) jl1 jl2)
       describe "exercise 2" $ do
-        it "should return Nothing if the index not found" $ do
-          let jl1 =
-                Append
-                  (Size 4)
-                  (Append
-                     (Size 3)
-                     (Single (Size 1) 'a')
-                     (Append
-                        (Size 2)
-                        (Single (Size 1) 'b')
-                        (Single (Size 1) 'c')))
-                  (Single (Size 1) 'd')
-          let jl2 = Append (Size 2) (Single (Size 1) 'e') (Single (Size 1) 'f')
-          let jl3 = Append (Size 6) jl1 jl2
-          indexJ 3 jl3 `shouldBe` (jlToList jl3 !!? 3)
+        let jl1 =
+              Append
+                (Size 4)
+                (Append
+                   (Size 3)
+                   (Single (Size 1) 'a')
+                   (Append (Size 2) (Single (Size 1) 'b') (Single (Size 1) 'c')))
+                (Single (Size 1) 'd')
+        let jl2 = Append (Size 2) (Single (Size 1) 'e') (Single (Size 1) 'f')
+        let jl3 = Append (Size 6) jl1 jl2
+        describe "2.1" $ do
+          it "should return same result as using jlToList and !!?" $ do
+            indexJ 1 jl3 `shouldBe` (jlToList jl3 !!? 1)
+            indexJ 3 jl3 `shouldBe` (jlToList jl3 !!? 3)
+            indexJ 10 jl3 `shouldBe` (jlToList jl3 !!? 10)
+        describe "2.2" $ do
+          it "should return the same list via normal drop" $ do
+            jlToList (dropJ 1 jl3) `shouldBe` drop 1 (jlToList jl3)
+            jlToList (dropJ 2 jl3) `shouldBe` drop 2 (jlToList jl3)
+            jlToList (dropJ 10 jl3) `shouldBe` drop 10 (jlToList jl3)
