@@ -2,6 +2,7 @@ import Data.Monoid
 import Test.Hspec
 
 import JoinList
+import Scrabble
 import Sized
 
 main :: IO ()
@@ -45,3 +46,11 @@ main =
             jlToList (takeJ 1 jl3) `shouldBe` take 1 (jlToList jl3)
             jlToList (takeJ 3 jl3) `shouldBe` take 3 (jlToList jl3)
             jlToList (takeJ 8 jl3) `shouldBe` take 8 (jlToList jl3)
+      describe "exercise 3" $ do
+        it "should return a correct score joinlist" $ do
+          let result =
+                Append
+                  (Score 23)
+                  (Single (Score 9) "yay ")
+                  (Single (Score 14) "haskell!")
+          scoreLine "yay " +++ scoreLine "haskell!" `shouldBe` result

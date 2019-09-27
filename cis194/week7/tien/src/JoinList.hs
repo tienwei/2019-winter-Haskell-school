@@ -2,6 +2,7 @@
 
 module JoinList where
 
+import Scrabble
 import Sized
 
 data JoinList m a
@@ -69,3 +70,7 @@ takeJ x jl@(Append y left right)
     jlSize = getSize . size $ y
     leftSize = getSize . size . tag $ left
 takeJ _ _ = Empty
+
+-- exercise 3 --
+scoreLine :: String -> JoinList Score String
+scoreLine x = Single (scoreString x) x
