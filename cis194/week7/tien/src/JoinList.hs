@@ -1,4 +1,6 @@
 {-# OPTIONS_GHC -Wall #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE TypeSynonymInstances #-}
 
 module JoinList where
 
@@ -25,7 +27,7 @@ tag (Append _ jl1 jl2) = (tag jl1) <> (tag jl2)
 [] !!? _ = Nothing
 _ !!? i
   | i < 0 = Nothing
-(x:xs) !!? 0 = Just x
+(x:_) !!? 0 = Just x
 (_:xs) !!? i = xs !!? (i - 1)
 
 jlToList :: JoinList m a -> [a]
