@@ -5,7 +5,7 @@
 module JoinListBuffer where
 
 import JoinList
-  ( JoinList(Append, Empty, Single)
+  ( JoinList(Empty, Single)
   , (+++)
   , dropJ
   , indexJ
