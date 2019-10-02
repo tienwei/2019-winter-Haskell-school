@@ -26,3 +26,14 @@ main =
         describe "1.3" $ do
           it "should return more fun guestList" $ do
             moreFun gl1 gl2 `shouldBe` gl2
+      describe "exercie 2" $ do
+        it "should work on the treeFold" $ do
+          let mockTree =
+                Node
+                  { rootLabel = 1
+                  , subForest =
+                      [ Node {rootLabel = 5, subForest = []}
+                      , Node {rootLabel = 3, subForest = []}
+                      ]
+                  }
+          treeFold 0 (\x y -> x + sum (y)) mockTree `shouldBe` 9

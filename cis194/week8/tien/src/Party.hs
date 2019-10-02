@@ -20,3 +20,14 @@ instance Monoid GuestList where
 -- 1.3 --
 moreFun :: GuestList -> GuestList -> GuestList
 moreFun = max
+
+-- exercie 2 --
+data Tree a =
+  Node
+    { rootLabel :: a -- label value
+    , subForest :: [Tree a] -- zero or more child trees
+    }
+
+treeFold :: b -> (a -> [b] -> b) -> Tree a -> b
+treeFold e f (Node l []) = f l [e]
+treeFold e f (Node l s) = f l $ treeFold e f <$> s
