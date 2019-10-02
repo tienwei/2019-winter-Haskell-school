@@ -28,6 +28,6 @@ data Tree a =
     , subForest :: [Tree a] -- zero or more child trees
     }
 
-treeFold :: b -> (a -> [b] -> b) -> Tree a -> b
-treeFold e f (Node l []) = f l [e]
-treeFold e f (Node l s) = f l $ treeFold e f <$> s
+treeFold :: (a -> [b] -> b) -> Tree a -> b
+treeFold f (Node l []) = f l []
+treeFold f (Node l s) = f l $ treeFold f <$> s

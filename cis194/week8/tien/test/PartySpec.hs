@@ -36,4 +36,4 @@ main =
                       , Node {rootLabel = 3, subForest = []}
                       ]
                   }
-          treeFold 0 (\x y -> x + sum (y)) mockTree `shouldBe` 9
+          treeFold (\x y -> x + sum (y)) mockTree `shouldBe` 9
