@@ -1,3 +1,4 @@
+import Data.Tree
 import Employee
 import Party
 import Test.Hspec
@@ -6,9 +7,9 @@ main :: IO ()
 main =
   hspec $ do
     describe "Party" $ do
+      let gl1 = GL [Emp {empName = "Emp 1", empFun = 10}] 10
+      let gl2 = GL [Emp {empName = "Emp 2", empFun = 15}] 15
       describe "exercie 1" $ do
-        let gl1 = GL [Emp {empName = "Emp 1", empFun = 10}] 10
-        let gl2 = GL [Emp {empName = "Emp 2", empFun = 15}] 15
         describe "1.1" $ do
           it "should return a correct guestList with an added Employee" $ do
             let initEL = [Emp {empName = "John", empFun = 8}]
@@ -37,3 +38,20 @@ main =
                       ]
                   }
           treeFold (\x y -> x + sum (y)) mockTree `shouldBe` 9
+      describe "exercie 3" $ do
+        it "should return a pair of optimal guestList with and without the boss" $ do
+          let boss1 = Emp {empName = "boss1", empFun = 12}
+          let boss2 = Emp {empName = "boss2", empFun = 20}
+          let withBossGL1 = glCons boss1 gl1
+          let withBossGL2 = glCons boss1 gl2
+          let groupGLs = [(withBossGL1, gl1), (withBossGL2, gl2)]
+          nextLevel boss2 groupGLs `shouldBe` (glCons boss2 withBossGL2, gl2)
+      describe "exercie 4" $ do
+        it "should return maxFun guest list from a company" $ do
+          maxFun testCompany `shouldBe`
+            (GL
+               [ Emp {empName = "Stan", empFun = 9}
+               , Emp {empName = "Sarah", empFun = 17}
+               , Emp {empName = "Sam", empFun = 4}
+               ]
+               30)
