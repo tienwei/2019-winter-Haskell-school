@@ -45,13 +45,13 @@ main =
           let withBossGL1 = glCons boss1 gl1
           let withBossGL2 = glCons boss1 gl2
           let groupGLs = [(withBossGL1, gl1), (withBossGL2, gl2)]
-          nextLevel boss2 groupGLs `shouldBe` (glCons boss2 withBossGL2, gl2)
+          nextLevel boss2 groupGLs `shouldBe`
+            ( GL [Emp {empName = "boss2", empFun = 20}] 20
+            , GL
+                [ Emp {empName = "boss2", empFun = 20}
+                , Emp {empName = "Emp 2", empFun = 15}
+                ]
+                35)
       describe "exercie 4" $ do
         it "should return maxFun guest list from a company" $ do
-          maxFun testCompany `shouldBe`
-            (GL
-               [ Emp {empName = "Stan", empFun = 9}
-               , Emp {empName = "Sarah", empFun = 17}
-               , Emp {empName = "Sam", empFun = 4}
-               ]
-               30)
+          (getFun . maxFun $ testCompany) `shouldBe` 26

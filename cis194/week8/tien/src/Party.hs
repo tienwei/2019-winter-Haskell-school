@@ -3,6 +3,7 @@
 
 module Party where
 
+import Data.List
 import Data.Tree
 import Employee
 
@@ -29,12 +30,20 @@ treeFold f (Node l s) = f l $ treeFold f <$> s
 
 -- exercie 3 --
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel em@(Emp _ emf) [] = (GL [em] emf, mempty)
-nextLevel em (gl:gls) = max (withBossGL, withoutBossGL) . nextLevel em $ gls
+nextLevel em@(Emp _ empF) [] = (GL [em] empF, mempty)
+nextLevel em@(Emp _ empF) (gl:gls) =
+  max (withBossGL, withoutBossGL) . nextLevel em $ gls
   where
-    withBossGL = glCons em . fst $ gl
-    withoutBossGL = snd gl
+    withBossGL = GL [em] empF
+    withoutBossGL = glCons em . snd $ gl
 
 -- exercie 4 --
 maxFun :: Tree Employee -> GuestList
 maxFun = max <$> fst <*> snd <$> treeFold nextLevel
+
+-- exercie 5 --
+totalFun :: Tree Employee -> Fun
+totalFun = getFun . maxFun
+
+totalEmpNameList :: Tree Employee -> [String]
+totalEmpNameList = sort . fmap getEmpName . getEmpList . maxFun
