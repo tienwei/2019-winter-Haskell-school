@@ -30,16 +30,15 @@ treeFold f (Node l s) = f l $ treeFold f <$> s
 
 -- exercie 3 --
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel em@(Emp _ empF) [] = (GL [em] empF, mempty)
-nextLevel em@(Emp _ empF) (gl:gls) =
-  max (withBossGL, withoutBossGL) . nextLevel em $ gls
+nextLevel emp [] = (glCons emp mempty, mempty)
+nextLevel emp gls = (gl1, gl2)
   where
-    withBossGL = GL [em] empF
-    withoutBossGL = glCons em . snd $ gl
+    gl1 = glCons emp $ foldr (<>) mempty $ snd <$> gls
+    gl2 = foldr (<>) mempty $ moreFun <$> fst <*> snd <$> gls
 
 -- exercie 4 --
 maxFun :: Tree Employee -> GuestList
-maxFun = max <$> fst <*> snd <$> treeFold nextLevel
+maxFun = moreFun <$> fst <*> snd <$> treeFold nextLevel
 
 -- exercie 5 --
 totalFun :: Tree Employee -> Fun
