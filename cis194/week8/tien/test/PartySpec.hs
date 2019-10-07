@@ -40,18 +40,12 @@ main =
           treeFold (\x y -> x + sum (y)) mockTree `shouldBe` 9
       describe "exercie 3" $ do
         it "should return a pair of optimal guestList with and without the boss" $ do
-          let boss1 = Emp {empName = "boss1", empFun = 12}
-          let boss2 = Emp {empName = "boss2", empFun = 20}
-          let withBossGL1 = glCons boss1 gl1
-          let withBossGL2 = glCons boss1 gl2
-          let groupGLs = [(withBossGL1, gl1), (withBossGL2, gl2)]
-          nextLevel boss2 groupGLs `shouldBe`
-            ( GL [Emp {empName = "boss2", empFun = 20}] 20
-            , GL
-                [ Emp {empName = "boss2", empFun = 20}
-                , Emp {empName = "Emp 2", empFun = 15}
-                ]
-                35)
+          let boss = Emp {empName = "Boss", empFun = 20}
+          let employee1 = Emp {empName = "Emp1", empFun = 5}
+          let employee2 = Emp {empName = "Emp2", empFun = 17}
+          let gls = [(GL [employee1] 5, mempty), (GL [employee2] 17, mempty)]
+          (nextLevel boss gls) `shouldBe`
+            (GL [boss] 20, GL [employee1, employee2] 22)
       describe "exercie 4" $ do
         it "should return maxFun guest list from a company" $ do
           (getFun . maxFun $ testCompany) `shouldBe` 26

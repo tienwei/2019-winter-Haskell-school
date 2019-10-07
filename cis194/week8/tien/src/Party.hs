@@ -30,7 +30,6 @@ treeFold f (Node l s) = f l $ treeFold f <$> s
 
 -- exercie 3 --
 nextLevel :: Employee -> [(GuestList, GuestList)] -> (GuestList, GuestList)
-nextLevel emp [] = (glCons emp mempty, mempty)
 nextLevel emp gls = (gl1, gl2)
   where
     gl1 = glCons emp $ foldr (<>) mempty $ snd <$> gls
