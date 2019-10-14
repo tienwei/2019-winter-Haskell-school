@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 {- CIS 194 HW 10
 -}
 module AParser where
@@ -64,3 +66,10 @@ first f (x, y) = (f x, y)
 
 instance Functor Parser where
   fmap f (Parser a) = Parser $ fmap (first f) . a
+
+-- exercise 2 --
+instance Applicative Parser where
+  pure a = Parser (\x -> Just (a, x))
+  Parser f <*> (Parser a) = Parser b
+    where
+      b xs = pure first <*> fmap fst (f xs) <*> (a xs)
