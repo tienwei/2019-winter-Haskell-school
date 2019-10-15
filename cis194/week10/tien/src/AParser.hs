@@ -85,7 +85,7 @@ drop1Pair :: (a1, [a2]) -> (a1, [a2])
 drop1Pair x = (fst x, drop 1 . snd $ x)
 
 formatter :: Char -> String -> Maybe (Char, [Char])
-formatter x = fmap (drop1Pair) . runParser (char x)
+formatter x = fmap drop1Pair . runParser (char x)
 
 abParser :: Parser (Char, Char)
 abParser = pair <$> Parser b <*> Parser a
