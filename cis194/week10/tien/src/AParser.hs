@@ -69,7 +69,36 @@ instance Functor Parser where
 
 -- exercise 2 --
 instance Applicative Parser where
-  pure a = Parser (\x -> Just (a, x))
-  Parser f <*> (Parser a) = Parser b
+  pure a = Parser x
+    where
+      x y = Just (a, y)
+  Parser f <*> Parser a = Parser b
     where
       b xs = pure first <*> fmap fst (f xs) <*> (a xs)
+
+-- exercise 3 --
+-- 3.1 --
+pair :: Char -> Char -> (Char, Char)
+pair x y = (y, x)
+
+drop1Pair :: (a1, [a2]) -> (a1, [a2])
+drop1Pair x = (fst x, drop 1 . snd $ x)
+
+formatter :: Char -> String -> Maybe (Char, [Char])
+formatter x = fmap (drop1Pair) . runParser (char x)
+
+abParser :: Parser (Char, Char)
+abParser = pair <$> Parser b <*> Parser a
+  where
+    a = formatter 'a'
+    b (_:xs) = formatter 'b' $ xs
+    b [] = Nothing
+
+-- 3.2 --
+emptyPair :: (a, b) -> ()
+emptyPair (_, _) = ()
+
+abParser_ :: Parser ()
+abParser_ = emptyPair <$> abParser
+-- 3.3 --
+-- intPair =
