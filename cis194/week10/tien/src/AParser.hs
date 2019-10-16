@@ -5,6 +5,7 @@
 module AParser where
 
 import Control.Applicative
+import Control.Monad
 
 import Data.Char
 
@@ -95,10 +96,7 @@ abParser = pair <$> Parser b <*> Parser a
     b [] = Nothing
 
 -- 3.2 --
-emptyPair :: (a, b) -> ()
-emptyPair (_, _) = ()
-
 abParser_ :: Parser ()
-abParser_ = emptyPair <$> abParser
+abParser_ = void abParser
 -- 3.3 --
 -- intPair =
