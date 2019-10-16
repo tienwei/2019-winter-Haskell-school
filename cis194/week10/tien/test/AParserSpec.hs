@@ -23,6 +23,6 @@ main =
           it "should return correct results of Parser ()" $ do
             runParser abParser_ "abcdef" `shouldBe` Just ((), "cdef")
             runParser abParser "aebcdf" `shouldBe` Nothing
-        -- describe "3.3" $ do
-        --   it "should return correct reults of intPair" $ do
-        --     runParser intPair "12 34" `shouldBe` (Just ([12, 34], ""))
+        describe "3.3" $ do
+          it "should return correct reults of intPair" $ do
+            runParser intPair "12 34" `shouldBe` (Just ([12, 34], ""))

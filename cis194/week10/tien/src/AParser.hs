@@ -1,5 +1,3 @@
-{-# OPTIONS_GHC -Wall #-}
-
 {- CIS 194 HW 10
 -}
 module AParser where
@@ -75,28 +73,21 @@ instance Applicative Parser where
       x y = Just (a, y)
   Parser f <*> Parser a = Parser b
     where
-      b xs = pure first <*> fmap fst (f xs) <*> (a xs)
+      b xs =
+        case f xs of
+          Just (r, s) -> first <$> fmap fst (f xs) <*> a s
+          Nothing -> Nothing
 
 -- exercise 3 --
 -- 3.1 --
-pair :: Char -> Char -> (Char, Char)
-pair x y = (y, x)
-
-drop1Pair :: (a1, [a2]) -> (a1, [a2])
-drop1Pair x = (fst x, drop 1 . snd $ x)
-
-formatter :: Char -> String -> Maybe (Char, [Char])
-formatter x = fmap drop1Pair . runParser (char x)
-
 abParser :: Parser (Char, Char)
-abParser = pair <$> Parser b <*> Parser a
-  where
-    a = formatter 'a'
-    b (_:xs) = formatter 'b' $ xs
-    b [] = Nothing
+abParser = (,) <$> char 'a' <*> char 'b'
 
 -- 3.2 --
 abParser_ :: Parser ()
 abParser_ = void abParser
+
 -- 3.3 --
--- intPair =
+intPair = f <$> posInt <*> char ' ' <*> posInt
+  where
+    f x y z = x : z : []
