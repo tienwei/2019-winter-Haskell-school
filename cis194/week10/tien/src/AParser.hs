@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wall #-}
+
 {- CIS 194 HW 10
 -}
 module AParser where
@@ -75,7 +77,7 @@ instance Applicative Parser where
     where
       b xs =
         case f xs of
-          Just (r, s) -> first <$> fmap fst (f xs) <*> a s
+          Just (_, s) -> first <$> fmap fst (f xs) <*> a s
           Nothing -> Nothing
 
 -- exercise 3 --
@@ -88,6 +90,22 @@ abParser_ :: Parser ()
 abParser_ = void abParser
 
 -- 3.3 --
-intPair = f <$> posInt <*> char ' ' <*> posInt
+intPair :: Parser [Integer]
+intPair = f <$> posInt <* char ' ' <*> posInt
   where
-    f x y z = x : z : []
+    f x y = x : y : []
+
+-- exercise 4 --
+instance Alternative Parser where
+  empty = Parser a
+    where
+      a _ = Nothing
+  Parser a <|> Parser b = Parser c
+    where
+      c xs =
+        case a xs of
+          Nothing -> b xs
+          Just (_, _) -> a xs
+-- exercise 5 --
+-- intOrUppercase :: Parser ()
+-- intOrUppercase = void $ posInt <|> (satisfy isUpper)
