@@ -26,3 +26,8 @@ main =
         describe "3.3" $ do
           it "should return correct reults of intPair" $ do
             runParser intPair "12 34" `shouldBe` (Just ([12, 34], ""))
+      describe "exercise 4 & 5" $ do
+        it "should use choice to determine correct results" $ do
+          runParser intOrUppercase "342abcd" `shouldBe` Just ((), "abcd")
+          runParser intOrUppercase "XYZ" `shouldBe` Just ((), "YZ")
+          runParser intOrUppercase "foo" `shouldBe` Nothing

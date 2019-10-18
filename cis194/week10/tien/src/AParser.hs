@@ -106,6 +106,7 @@ instance Alternative Parser where
         case a xs of
           Nothing -> b xs
           Just (_, _) -> a xs
+
 -- exercise 5 --
--- intOrUppercase :: Parser ()
--- intOrUppercase = void $ posInt <|> (satisfy isUpper)
+intOrUppercase :: Parser ()
+intOrUppercase = void $ (const ' ' <$> posInt) <|> satisfy isUpper
