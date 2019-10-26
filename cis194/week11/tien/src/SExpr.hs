@@ -1,19 +1,22 @@
+{-# OPTIONS_GHC -Wall #-}
+
 {- CIS 194 HW 11
 -}
 module SExpr where
 
 import AParser
 import Control.Applicative
+
 import Data.Char
 
 ------------------------------------------------------------
 --  1. Parsing repetitions
 ------------------------------------------------------------
 zeroOrMore :: Parser a -> Parser [a]
-zeroOrMore = many
+zeroOrMore p = oneOrMore p <|> pure []
 
 oneOrMore :: Parser a -> Parser [a]
-oneOrMore p = empty <|> some p
+oneOrMore p = (:) <$> p <*> zeroOrMore p
 
 ------------------------------------------------------------
 --  2. Utilities
@@ -43,3 +46,19 @@ data SExpr
   = A Atom
   | Comb [SExpr]
   deriving (Show)
+
+escParens :: Parser a -> Parser a
+escParens p = char '(' *> p <* char ')'
+
+escSpaces :: Parser a -> Parser a
+escSpaces p = spaces *> p <* spaces
+
+parseSExpr :: Parser SExpr
+parseSExpr = pa <|> pc
+  where
+    p = A . N
+    q = A . I
+    pInt = escSpaces $ p <$> posInt
+    pIdnt = escSpaces $ q <$> ident
+    pa = pInt <|> pIdnt
+    pc = Comb <$> (escParens $ zeroOrMore . escSpaces $ pa <|> parseSExpr)
